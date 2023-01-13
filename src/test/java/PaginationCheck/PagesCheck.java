@@ -13,13 +13,14 @@ public class PagesCheck {
 
   private static final String usersEndpoint = "https://reqres.in/api/users";
 
-  private int totalUsers;
+  private int totalUsers = 0;
 
-  private int totalPages;
+  private int totalPages = 0;
   private Map<Integer, JSONObject> responseBody = new HashMap<>();
 
-  private JSONArray getParsedUsers(JSONObject obj) {
-    return (JSONArray) obj.get("data");
+  private static int getPageTotalUsers(JSONObject obj) {
+    JSONArray data = (JSONArray) obj.get("data");
+    return data.length();
   }
 
   private static int getTotalUsers(JSONObject obj) {
@@ -39,8 +40,10 @@ public class PagesCheck {
   private void addParsedPage(int page){
     JSONObject obj = new JSONObject(getUserPage(page));
     this.responseBody.put(page, obj);
-    this.totalPages = getTotalPages(obj);
-    this.totalUsers = getTotalUsers(obj);
+    if (this.totalPages >= 0 && this.totalUsers >= 0) {
+      this.totalPages = getTotalPages(obj);
+      this.totalUsers = getTotalUsers(obj);
+    }
   }
 
   public static void main(String[] args) {
@@ -49,6 +52,12 @@ public class PagesCheck {
     System.out.println(pageCheck.responseBody);
     System.out.println(pageCheck.totalPages);
     System.out.println(pageCheck.totalUsers);
+    int countUsers = getPageTotalUsers(pageCheck.responseBody.get(1));
+    for (int pageIndex = 2; pageIndex < pageCheck.totalPages + 1; pageIndex++) {
+      pageCheck.addParsedPage(pageIndex);
+      countUsers += getPageTotalUsers(pageCheck.responseBody.get(pageIndex));
+    }
+    System.out.println(countUsers);
   }
 
 }
