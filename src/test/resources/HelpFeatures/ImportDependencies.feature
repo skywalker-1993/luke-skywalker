@@ -8,6 +8,7 @@ Feature: Import JS Functions
     #############
     * def reqresLib = Java.type('RequestBody.ReqresUser')
     * def genericLib = Java.type('RequestBody.GenericRequest')
+    * def paginationLib = Java.type('PaginationCheck.PagesCheck')
 
     ###################
     # GENERIC METHODS #
