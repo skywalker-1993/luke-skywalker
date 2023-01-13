@@ -15,12 +15,16 @@ public class PagesCheck {
 
   public int totalUsers = 0;
 
-  private int totalPages = 0;
-  private Map<Integer, JSONObject> responseBody = new HashMap<>();
+  protected int totalPages = 0;
+  protected Map<Integer, JSONObject> responseBody = new HashMap<>();
 
   private static int getPageTotalUsers(JSONObject obj) {
     JSONArray data = (JSONArray) obj.get("data");
     return data.length();
+  }
+
+  protected static JSONArray getPageUsers(JSONObject obj) {
+    return (JSONArray) obj.get("data");
   }
 
   private static int getTotalUsers(JSONObject obj) {
@@ -37,10 +41,10 @@ public class PagesCheck {
     return response.getBodyAsString();
   }
 
-  private void addParsedPage(int page){
+  protected void addParsedPage(int page){
     JSONObject obj = new JSONObject(getUserPage(page));
     this.responseBody.put(page, obj);
-    if (this.totalPages >= 0 && this.totalUsers >= 0) {
+    if (0 == this.totalPages && 0 == this.totalUsers) {
       this.totalPages = getTotalPages(obj);
       this.totalUsers = getTotalUsers(obj);
     }
@@ -61,18 +65,6 @@ public class PagesCheck {
   }
 
   public static void main(String[] args) {
-//    PagesCheck pageCheck = new PagesCheck();
-//    pageCheck.addParsedPage(1);
-//    System.out.println(pageCheck.responseBody);
-//    System.out.println(pageCheck.totalPages);
-//    System.out.println(pageCheck.totalUsers);
-//    int countUsers = getPageTotalUsers(pageCheck.responseBody.get(1));
-//    for (int pageIndex = 2; pageIndex < pageCheck.totalPages + 1; pageIndex++) {
-//      pageCheck.addParsedPage(pageIndex);
-//      countUsers += getPageTotalUsers(pageCheck.responseBody.get(pageIndex));
-//    }
-//    System.out.println(countUsers);
-
     PagesCheck pageCheck = getPageCheckInstance();
     System.out.println(getTotalUserCount(pageCheck));
   }
