@@ -20,8 +20,6 @@ public class ReqresUser {
   }
 
   public static String getUserBody(ReqresUser userObject) throws JsonProcessingException {
-    //ObjectMapper mapper = new ObjectMapper();
-    //return  mapper.writeValueAsString(userObject);
     return getRequestBody(userObject);
   }
 
