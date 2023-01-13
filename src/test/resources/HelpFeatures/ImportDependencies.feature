@@ -9,6 +9,7 @@ Feature: Import JS Functions
     * def reqresLib = Java.type('RequestBody.ReqresUser')
     * def genericLib = Java.type('RequestBody.GenericRequest')
     * def paginationLib = Java.type('PaginationCheck.PagesCheck')
+    * def lookupUserLib = Java.type('PaginationCheck.UserLookup')
 
     ###################
     # GENERIC METHODS #
@@ -35,10 +36,5 @@ Feature: Import JS Functions
       return newObj;
     }
     """
-
-    #######################
-    # RESPONSE VALIDATION #
-    #######################
-
 
   Scenario: Import JS Functions

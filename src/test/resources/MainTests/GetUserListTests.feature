@@ -17,12 +17,17 @@ Feature: Demo Challenge Task #1 - Get User List
     * def countedUsers = paginationLib.getTotalUserCount(pageCheckInstance)
     * match pageCheckInstance.getTotalUsers() == countedUsers
 
-  # TODO
-  # Scenario: Check that testuser is listed
+  Scenario: Check that testuser is listed
+    * def pageCheckInstance = paginationLib.getPageCheckInstance()
+    * def foundUser = lookupUserLib.lookForUser(pageCheckInstance, "tobias.funke@reqres.in")
+    * def parsedJSON = JSON.parse(foundUser)
+    * configure continueOnStepFailure = { enabled: true, continueAfter: true, keywords: ['assert'] }
+    * assert 0 <= parsedJSON.id
+    * assert checkType("string", parsedJSON.first_name)
+    * assert checkType("string", parsedJSON.last_name)
+    * assert parsedJSON.avatar.endsWith(".jpg")
+    * configure continueOnStepFailure = { enabled: false, continueAfter: true, keywords: ['assert'] }
 
   # TODO
-#  Scenario: Check that all users aren't missing any data
-#    * call read('../TestBasis/ReqresBaseScenarios.feature@GetUsers') {'expCode': 200}
-#    * match
-
-
+  # Scenario: Check that all users aren't missing any data
+  #   * call read('../TestBasis/ReqresBaseScenarios.feature@GetUsers') {'expCode': 200}
