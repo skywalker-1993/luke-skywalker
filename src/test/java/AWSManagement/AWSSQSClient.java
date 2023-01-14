@@ -1,11 +1,15 @@
 package AWSManagement;
 
+import static RequestBody.CarRequest.getCarBody;
+import static RequestBody.CarRequest.getRandomCarObject;
+
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
 import com.amazonaws.services.sqs.model.CreateQueueRequest;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -32,7 +36,7 @@ public class AWSSQSClient {
 
   public static void createQueue(AmazonSQS client, String queueName) {
     CreateQueueRequest createRequest = new CreateQueueRequest(queueName)
-        .addAttributesEntry("DelaySeconds", "60")
+        .addAttributesEntry("DelaySeconds", "0")
         .addAttributesEntry("MessageRetentionPeriod", "86400");
     client.createQueue(createRequest);
   }
@@ -48,7 +52,7 @@ public class AWSSQSClient {
     SendMessageRequest sendMsgRequest = new SendMessageRequest()
         .withQueueUrl(queueUrl)
         .withMessageBody(msg)
-        .withDelaySeconds(5);
+        .withDelaySeconds(0);
     client.sendMessage(sendMsgRequest);
   }
 
@@ -56,8 +60,13 @@ public class AWSSQSClient {
     return client.receiveMessage(queueUrl).getMessages();
   }
 
-  public static void main(String[] args) {
-
+  public static void main(String[] args) throws JsonProcessingException {
+    String messageToSend = getCarBody(getRandomCarObject());
+    AmazonSQS sqs = getSQSClient();
+    createQueue(sqs, "cars");
+    String queueUrl = getQueueUrl(sqs, "cars");
+    sendMessage(sqs, queueUrl, messageToSend);
+    System.out.println(receiveMessages(sqs, queueUrl));
   }
 
 }

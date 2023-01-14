@@ -2,7 +2,25 @@ version: "3.7"
 
 services:
 
+  test-service:
+    container_name: test-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /home/test_repo
+    depends_on:
+      - localstack
+    environment:
+      BUILD_MODE: "qa"
+      MOCKSERVER_HOST: "localhost"
+      MOCKSERVER_PORT: "4566"
+    volumes:
+      - test_repo:/home/test_repo/
+
   localstack:
     image: localstack/localstack
     ports:
       - "4566:4566"
+
+volumes:
+  test_repo:

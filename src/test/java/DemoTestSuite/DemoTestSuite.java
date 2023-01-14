@@ -20,9 +20,20 @@ public class DemoTestSuite {
 
     @Test
     @Order(1)
-    public void testDemo() {
-        String karateLogPath = "build/test-reports/testDemo";
-        Results results = Runner.path("../MainTests/DemoTestSuite")
+    public void testUserRegistration() {
+        String karateLogPath = "build/test-reports/testUserRegistration";
+        Results results = Runner.path("../MainTests/RegistrationTests")
+            .relativeTo(getClass())
+            .reportDir(karateLogPath)
+            .parallel(THREAD_COUNT);
+        assertEquals(0, results.getFailCount(), REPORT_MESSAGE + karateLogPath);
+    }
+
+    @Test
+    @Order(2)
+    public void testUserRetrieval() {
+        String karateLogPath = "build/test-reports/testUserRetrieval";
+        Results results = Runner.path("../MainTests/GetUserListTests")
             .relativeTo(getClass())
             .reportDir(karateLogPath)
             .parallel(THREAD_COUNT);
