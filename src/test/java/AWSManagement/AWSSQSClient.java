@@ -77,7 +77,7 @@ public class AWSSQSClient {
     return client.receiveMessage(queueUrl).getMessages();
   }
 
-  public static void checkReceivedMessages(AmazonSQS client, String queueUrl, List<String> sentMessages) {
+  public static boolean checkReceivedMessages(AmazonSQS client, String queueUrl, List<String> sentMessages) {
     List<String> msgMatch = new ArrayList<>();
     for (int msgIndex = 0; MESSAGES_TOTAL > msgIndex; msgIndex++) {
       List<Message> messages = receiveMessages(client, queueUrl);
@@ -86,21 +86,17 @@ public class AWSSQSClient {
       }
       client.deleteMessage(queueUrl, messages.get(0).getReceiptHandle());
     }
-    System.out.println(msgMatch);
+    return (MESSAGES_TOTAL == msgMatch.size());
   }
 
   public static void main(String[] args) throws JsonProcessingException {
     List<String> messagesToSend = createMessagesToSend();
-    System.out.println(messagesToSend);
     AmazonSQS sqs = getSQSClient();
     createQueue(sqs, "cars");
     String queueUrl = getQueueUrl(sqs, "cars");
     //Make sure that queue is empty first!!!
     sendSeveralMessages(sqs, queueUrl, messagesToSend);
-//    List<Message> messages = receiveMessages(sqs, queueUrl);
-//    sqs.deleteMessage(queueUrl, messages.get(0).getReceiptHandle());
-//    System.out.println(receiveMessages(sqs, queueUrl));
-    checkReceivedMessages(sqs, queueUrl, messagesToSend);
+    System.out.println(checkReceivedMessages(sqs, queueUrl, messagesToSend));
   }
 
 }
