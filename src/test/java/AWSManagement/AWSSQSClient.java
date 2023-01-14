@@ -6,26 +6,23 @@ import static RequestBody.CarRequest.getRandomCarObject;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
+import com.amazonaws.services.sqs.model.AmazonSQSException;
 import com.amazonaws.services.sqs.model.CreateQueueRequest;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 public class AWSSQSClient {
 
-  //try {
-  //sqs.createQueue(create_request);
-  //    } catch (AmazonSQSException e) {
-  //      if (!e.getErrorCode().equals("QueueAlreadyExists")) {
-  //        throw e;
-  //      }
-  //    }
   private static final String sqsEndpoint = "http://localhost:4566";
   private static final String sqsRegion = "us-west-2";
+
+  private static final int MESSAGES_TOTAL = 3;
 
 
   public static AmazonSQS getSQSClient() {
@@ -38,7 +35,13 @@ public class AWSSQSClient {
     CreateQueueRequest createRequest = new CreateQueueRequest(queueName)
         .addAttributesEntry("DelaySeconds", "0")
         .addAttributesEntry("MessageRetentionPeriod", "86400");
-    client.createQueue(createRequest);
+    try {
+      client.createQueue(createRequest);
+    } catch (AmazonSQSException e) {
+      if (!"QueueAlreadyExists".equals(e.getErrorCode())) {
+        throw e;
+      }
+    }
   }
 
   public static String getQueueUrl(AmazonSQS client, String queueName) {
@@ -56,17 +59,48 @@ public class AWSSQSClient {
     client.sendMessage(sendMsgRequest);
   }
 
+  public static void sendSeveralMessages(AmazonSQS client, String queueUrl, List<String> messages) {
+    for (String msg: messages) {
+      sendMessage(client, queueUrl, msg);
+    }
+  }
+
+  public static List<String> createMessagesToSend() throws JsonProcessingException {
+    List<String> messagesToSend = new ArrayList<>();
+    for (int i = 0; MESSAGES_TOTAL > i; i++) {
+      messagesToSend.add(getCarBody(getRandomCarObject()));
+    }
+    return messagesToSend;
+  }
+
   public static List<Message> receiveMessages(AmazonSQS client, String queueUrl) {
     return client.receiveMessage(queueUrl).getMessages();
   }
 
+  public static void checkReceivedMessages(AmazonSQS client, String queueUrl, List<String> sentMessages) {
+    List<String> msgMatch = new ArrayList<>();
+    for (int msgIndex = 0; MESSAGES_TOTAL > msgIndex; msgIndex++) {
+      List<Message> messages = receiveMessages(client, queueUrl);
+      if (sentMessages.get(msgIndex).equals(messages.get(0).getBody())) {
+        msgMatch.add(sentMessages.get(msgIndex));
+      }
+      client.deleteMessage(queueUrl, messages.get(0).getReceiptHandle());
+    }
+    System.out.println(msgMatch);
+  }
+
   public static void main(String[] args) throws JsonProcessingException {
-    String messageToSend = getCarBody(getRandomCarObject());
+    List<String> messagesToSend = createMessagesToSend();
+    System.out.println(messagesToSend);
     AmazonSQS sqs = getSQSClient();
     createQueue(sqs, "cars");
     String queueUrl = getQueueUrl(sqs, "cars");
-    sendMessage(sqs, queueUrl, messageToSend);
-    System.out.println(receiveMessages(sqs, queueUrl));
+    //Make sure that queue is empty first!!!
+    sendSeveralMessages(sqs, queueUrl, messagesToSend);
+//    List<Message> messages = receiveMessages(sqs, queueUrl);
+//    sqs.deleteMessage(queueUrl, messages.get(0).getReceiptHandle());
+//    System.out.println(receiveMessages(sqs, queueUrl));
+    checkReceivedMessages(sqs, queueUrl, messagesToSend);
   }
 
 }
