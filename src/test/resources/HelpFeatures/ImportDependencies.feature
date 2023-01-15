@@ -10,7 +10,7 @@ Feature: Import JS Functions
     * def genericLib = Java.type('RequestBody.GenericRequest')
     * def paginationLib = Java.type('PaginationCheck.PagesCheck')
     * def lookupUserLib = Java.type('PaginationCheck.UserLookup')
-    * def awsSQSLib = Java.type('AWSManagement.AWSSQSClient')
+    * def awsSQSLib = Java.type('AWSManagement.AWSSQSRunner')
 
     ###################
     # GENERIC METHODS #

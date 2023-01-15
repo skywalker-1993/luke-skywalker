@@ -11,7 +11,7 @@ services:
     depends_on:
       - localstack
     environment:
-      BUILD_MODE: "qa"
+      TEST_MODE: "qa"
       LOCALSTACK_HOST: "localstack"
       LOCALSTACK_PORT: "4566"
       LOCALSTACK_REGION: "us-west-2"

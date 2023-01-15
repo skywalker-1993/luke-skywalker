@@ -23,8 +23,3 @@ Feature: Includes Basic Scenarios To Be Used For The Configuration Controller Te
     Given path "/api/users?page=" + page
     When method GET
     Then match expCode == responseStatus
-#
-#  Scenario Outline: Retrieve page users
-#    * call read('@GetUsersPage') {'expCode': 200}
-#    Examples:
-#      | dynamicIterator |

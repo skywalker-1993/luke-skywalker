@@ -2,7 +2,6 @@ function fn() {
 
   let config = {
     reqresUrl: "https://reqres.in",
-    //localstackUrl: "http://localhost:4566",
     userName: "eve.holt@reqres.in",
     userPassword: "cityslicka"
   }
