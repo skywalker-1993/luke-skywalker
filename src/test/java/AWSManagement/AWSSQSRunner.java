@@ -67,7 +67,8 @@ public class AWSSQSRunner {
 
   public static void createQueue(AmazonSQS client, String queueName) {
     CreateQueueRequest createRequest = new CreateQueueRequest(queueName)
-        .addAttributesEntry("DelaySeconds", "0");
+        .addAttributesEntry("DelaySeconds", "0")
+        .addAttributesEntry("MessageRetentionPeriod", "345600");
     try {
       client.createQueue(createRequest);
     } catch (AmazonSQSException e) {
@@ -113,11 +114,11 @@ public class AWSSQSRunner {
   public static boolean checkReceivedMessages(AmazonSQS client, String queueUrl, List<String> sentMessages) {
     List<String> msgMatch = new ArrayList<>();
     for (int msgIndex = 0; MESSAGES_TOTAL > msgIndex; msgIndex++) {
-      List<Message> messages = receiveMessages(client, queueUrl);
-      if (sentMessages.get(msgIndex).equals(messages.get(0).getBody())) {
+      List<Message> receivedMessages = receiveMessages(client, queueUrl);
+      if (sentMessages.get(msgIndex).equals(receivedMessages.get(0).getBody())) {
         msgMatch.add(sentMessages.get(msgIndex));
       }
-      client.deleteMessage(queueUrl, messages.get(0).getReceiptHandle());
+      client.deleteMessage(queueUrl, receivedMessages.get(0).getReceiptHandle());
     }
     return (MESSAGES_TOTAL == msgMatch.size());
   }
