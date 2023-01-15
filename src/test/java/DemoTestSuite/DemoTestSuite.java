@@ -40,4 +40,15 @@ public class DemoTestSuite {
         assertEquals(0, results.getFailCount(), REPORT_MESSAGE + karateLogPath);
     }
 
+    @Test
+    @Order(3)
+    public void testStreamProcessing() {
+        String karateLogPath = "build/test-reports/testStreamProcessing";
+        Results results = Runner.path("../MainTests/StreamProcessingTests")
+            .relativeTo(getClass())
+            .reportDir(karateLogPath)
+            .parallel(THREAD_COUNT);
+        assertEquals(0, results.getFailCount(), REPORT_MESSAGE + karateLogPath);
+    }
+
 }

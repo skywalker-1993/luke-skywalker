@@ -19,8 +19,10 @@ import java.util.List;
 @Slf4j
 public class AWSSQSClient {
 
-  private static final String sqsEndpoint = "http://localhost:4566";
-  private static final String sqsRegion = "us-west-2";
+
+  private static final String sqsEndpoint = "http://" + System.getenv("LOCALSTACK_HOST")
+      + ":" + System.getenv("LOCALSTACK_PORT"); //"http://localhost:4566";
+  private static final String sqsRegion = System.getenv("LOCALSTACK_REGION"); //"us-west-2";
 
   private static final int MESSAGES_TOTAL = 3;
 

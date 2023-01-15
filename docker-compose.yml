@@ -12,8 +12,11 @@ services:
       - localstack
     environment:
       BUILD_MODE: "qa"
-      MOCKSERVER_HOST: "localhost"
-      MOCKSERVER_PORT: "4566"
+      LOCALSTACK_HOST: "localstack"
+      LOCALSTACK_PORT: "4566"
+      LOCALSTACK_REGION: "us-west-2"
+      AWS_ACCESS_KEY_ID: "testuser"
+      AWS_SECRET_ACCESS_KEY: "testkey"
     volumes:
       - test_repo:/home/test_repo/
 

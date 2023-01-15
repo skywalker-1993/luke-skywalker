@@ -7,4 +7,4 @@ Feature: Demo Challenge Task #2 - Stream processing test
     When awsSQSLib.createQueue(sqs, "cars");
     And def queueUrl = awsSQSLib.getQueueUrl(sqs, "cars");
     Then awsSQSLib.sendSeveralMessages(sqs, queueUrl, messagesToSend)
-    And print awsSQSLib.checkReceivedMessages(sqs, queueUrl, messagesToSend)
+    And assert awsSQSLib.checkReceivedMessages(sqs, queueUrl, messagesToSend)
