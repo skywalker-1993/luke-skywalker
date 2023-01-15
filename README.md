@@ -21,7 +21,7 @@ Since the tests can be run in multiple ways, here's how you're able to retrieve 
 
 1. Tests ran via Docker containers:
    1. Go to the volume related to the test container
-   2. Open the build folder and look for the 'test-reports'
+   2. Open the 'build' folder and look for the 'test-reports'
    3. There should be several folders related to each test set that ran (check the paths mentioned in the main runner java class)
 2. Tests ran locally via gradle:
    1. Same thing as mentioned before, only this time, the reports are in the system's folder and not on the volume
