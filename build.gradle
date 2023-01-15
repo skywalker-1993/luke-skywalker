@@ -39,6 +39,7 @@ sourceSets {
 
 test {
     systemProperty "test_mode", project.properties["test_mode"]
+    systemProperty "karate.env", System.properties.getProperty("karate.env")
     useJUnitPlatform()
     outputs.upToDateWhen { false }
     testLogging {

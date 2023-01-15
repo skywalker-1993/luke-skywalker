@@ -1,9 +1,17 @@
 function fn() {
 
+  const env = karate.env;
+
   let config = {
     reqresUrl: "https://reqres.in",
     userName: "eve.holt@reqres.in",
-    userPassword: "cityslicka"
+    userPassword: "cityslicka",
+    env: "dev"
+  }
+
+  if (env === "qa") {
+    //Here the config attribute values can be overwritten according to the test environment
+    config.env = "qa"
   }
 
   let result = {

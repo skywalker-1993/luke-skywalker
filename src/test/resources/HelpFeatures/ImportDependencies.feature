@@ -39,3 +39,4 @@ Feature: Import JS Functions
     """
 
   Scenario: Import JS Functions
+    * print env
