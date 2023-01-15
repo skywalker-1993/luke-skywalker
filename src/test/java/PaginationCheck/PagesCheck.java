@@ -64,9 +64,4 @@ public class PagesCheck {
     return countUsers;
   }
 
-  public static void main(String[] args) {
-    PagesCheck pageCheck = getPageCheckInstance();
-    System.out.println(getTotalUserCount(pageCheck));
-  }
-
 }

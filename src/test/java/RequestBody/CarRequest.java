@@ -79,8 +79,4 @@ public class CarRequest {
     return getRequestBody(car);
   }
 
-  public static void main(String[] args) throws JsonProcessingException {
-    System.out.println(getCarBody(getRandomCarObject()));
-  }
-
 }

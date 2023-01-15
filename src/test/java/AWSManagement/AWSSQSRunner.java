@@ -122,14 +122,4 @@ public class AWSSQSRunner {
     return (MESSAGES_TOTAL == msgMatch.size());
   }
 
-  public static void main(String[] args) throws JsonProcessingException {
-    List<String> messagesToSend = createMessagesToSend();
-    AmazonSQS sqs = getSQSClient();
-    createQueue(sqs, "cars");
-    String queueUrl = getQueueUrl(sqs, "cars");
-    //Make sure that queue is empty first!!!
-    sendSeveralMessages(sqs, queueUrl, messagesToSend);
-    System.out.println(checkReceivedMessages(sqs, queueUrl, messagesToSend));
-  }
-
 }

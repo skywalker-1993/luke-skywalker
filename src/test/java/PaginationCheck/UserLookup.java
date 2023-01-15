@@ -1,6 +1,5 @@
 package PaginationCheck;
 
-import static PaginationCheck.PagesCheck.getPageCheckInstance;
 import static PaginationCheck.PagesCheck.getPageUsers;
 
 import org.json.JSONArray;
@@ -29,13 +28,6 @@ public class UserLookup {
       }
     }
     return currUser;
-  }
-
-  public static void main(String[] args) {
-    PagesCheck pageCheck1 = getPageCheckInstance();
-    System.out.println(lookForUser(pageCheck1, "eve.holt@reqres.in"));
-    //PagesCheck pageCheck2 = getPageCheckInstance();
-    System.out.println(lookForUser(pageCheck1, "tobias.funke@reqres.in"));
   }
 
 }

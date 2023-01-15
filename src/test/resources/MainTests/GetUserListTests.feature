@@ -27,7 +27,3 @@ Feature: Demo Challenge Task #1 - Get User List
     * assert checkType("string", parsedJSON.last_name)
     * assert parsedJSON.avatar.endsWith(".jpg")
     * configure continueOnStepFailure = { enabled: false, continueAfter: true, keywords: ['assert'] }
-
-  # TODO
-  # Scenario: Check that all users aren't missing any data
-  #   * call read('../TestBasis/ReqresBaseScenarios.feature@GetUsers') {'expCode': 200}
