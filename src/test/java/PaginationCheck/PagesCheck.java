@@ -2,6 +2,7 @@ package PaginationCheck;
 
 import com.intuit.karate.Http;
 import lombok.Data;
+import org.apache.http.HttpException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,9 +13,7 @@ import java.util.Map;
 public class PagesCheck {
 
   private static final String usersEndpoint = "https://reqres.in/api/users";
-
   public int totalUsers = 0;
-
   protected int totalPages = 0;
   protected Map<Integer, JSONObject> responseBody = new HashMap<>();
 
@@ -35,13 +34,13 @@ public class PagesCheck {
     return (int) obj.get("total_pages");
   }
 
-  private static String getUserPage(int page) {
+  private static String getUserPage(int page) throws HttpException {
     com.intuit.karate.http.Response response = Http.to(usersEndpoint + "?page=" + page).get();
-    if (response.getStatus() != 200) throw new IllegalArgumentException("Users List was NOT retrieved!");
+    if (response.getStatus() != 200) throw new HttpException("Users List was NOT retrieved!");
     return response.getBodyAsString();
   }
 
-  protected void addParsedPage(int page){
+  protected void addParsedPage(int page) throws HttpException {
     JSONObject obj = new JSONObject(getUserPage(page));
     this.responseBody.put(page, obj);
     if (0 == this.totalPages && 0 == this.totalUsers) {
@@ -54,7 +53,7 @@ public class PagesCheck {
     return new PagesCheck();
   }
 
-  public static int getTotalUserCount(PagesCheck pageCheck) {
+  public static int getTotalUserCount(PagesCheck pageCheck) throws HttpException {
     pageCheck.addParsedPage(1);
     int countUsers = getPageTotalUsers(pageCheck.responseBody.get(1));
     for (int pageIndex = 2; pageIndex < pageCheck.totalPages + 1; pageIndex++) {

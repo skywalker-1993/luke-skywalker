@@ -10,6 +10,8 @@ Feature: Demo Challenge Task #1 - Get User List
     * assert checkType("number", response.total_pages)
     * assert isObjectArray(response.data)
     * assert !isObjectArray(response.support)
+    * assert checkType("string", response.support.url)
+    * assert checkType("string", response.support.text)
     * configure continueOnStepFailure = { enabled: false, continueAfter: true, keywords: ['match', 'assert'] }
 
   Scenario: Check total number of listed users

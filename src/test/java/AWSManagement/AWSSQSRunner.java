@@ -28,7 +28,7 @@ public class AWSSQSRunner {
 
   private Map<String, String> sqsInformation = new HashMap<>();
 
-  private static final int MESSAGES_TOTAL = 3;
+  private static final int MESSAGES_TOTAL = 5;
 
   private void setSqsInformation() {
     String hostName = null != System.getenv("LOCALSTACK_HOST") ? System.getenv("LOCALSTACK_HOST") : "localhost";
@@ -112,15 +112,22 @@ public class AWSSQSRunner {
   }
 
   public static boolean checkReceivedMessages(AmazonSQS client, String queueUrl, List<String> sentMessages) {
-    List<String> msgMatch = new ArrayList<>();
+    int msgMatch = 0; List<String> missingMessages = new ArrayList<>();
     for (int msgIndex = 0; MESSAGES_TOTAL > msgIndex; msgIndex++) {
       List<Message> receivedMessages = receiveMessages(client, queueUrl);
-      if (sentMessages.get(msgIndex).equals(receivedMessages.get(0).getBody())) {
-        msgMatch.add(sentMessages.get(msgIndex));
+      try {
+        if (sentMessages.get(msgIndex).equals(receivedMessages.get(0).getBody())) {
+          msgMatch += 1;
+          client.deleteMessage(queueUrl, receivedMessages.get(0).getReceiptHandle());
+        } else {
+          missingMessages.add(sentMessages.get(msgIndex));
+        }
+      } catch (IndexOutOfBoundsException ex) {
+        log.error("Fully emptied queue while checking sent image: " + sentMessages.get(msgIndex));
       }
-      client.deleteMessage(queueUrl, receivedMessages.get(0).getReceiptHandle());
     }
-    return (MESSAGES_TOTAL == msgMatch.size());
+    log.info("Missing messages: " + missingMessages);
+    return (MESSAGES_TOTAL == msgMatch);
   }
 
 }

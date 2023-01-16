@@ -2,6 +2,7 @@ package PaginationCheck;
 
 import static PaginationCheck.PagesCheck.getPageUsers;
 
+import org.apache.http.HttpException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,7 +18,7 @@ public class UserLookup {
     return new JSONObject("{}");
   }
 
-  public static JSONObject lookForUser(PagesCheck pageCheck, String email) {
+  public static JSONObject lookForUser(PagesCheck pageCheck, String email) throws HttpException {
     pageCheck.addParsedPage(1);
     JSONObject currUser = getUserWithEmail(getPageUsers(pageCheck.getResponseBody().get(1)), email);
     if ("{}".equals(currUser.toString())) {
