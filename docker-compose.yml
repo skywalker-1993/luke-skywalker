@@ -4,6 +4,7 @@ services:
 
   test-service:
     container_name: test-container
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile

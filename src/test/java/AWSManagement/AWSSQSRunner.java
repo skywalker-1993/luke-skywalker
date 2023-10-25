@@ -116,6 +116,7 @@ public class AWSSQSRunner {
     for (int msgIndex = 0; MESSAGES_TOTAL > msgIndex; msgIndex++) {
       List<Message> receivedMessages = receiveMessages(client, queueUrl);
       try {
+        log.info("TIAGO!!!: " + receivedMessages.get(0).getBody());
         if (sentMessages.get(msgIndex).equals(receivedMessages.get(0).getBody())) {
           msgMatch += 1;
           client.deleteMessage(queueUrl, receivedMessages.get(0).getReceiptHandle());
