@@ -51,4 +51,14 @@ public class DemoTestSuite {
         assertEquals(0, results.getFailCount(), REPORT_MESSAGE + karateLogPath);
     }
 
+    @Test
+    @Order(4)
+    public void testMockServer() {
+        String karateLogPath = "build/test-reports/testMockServer";
+        Results results = Runner.path("../MainTests/MockServerTests")
+                .relativeTo(getClass())
+                .reportDir(karateLogPath)
+                .parallel(THREAD_COUNT);
+        assertEquals(0, results.getFailCount(), REPORT_MESSAGE + karateLogPath);
+    }
 }

@@ -1,4 +1,4 @@
-FROM gradle:8.4.0-jdk11-alpine
+FROM gradle:8.4.0-jdk17-alpine
 ARG TEST_ENV
 ENV TEST_ENV=${TEST_ENV}
 WORKDIR /home/test_repo/

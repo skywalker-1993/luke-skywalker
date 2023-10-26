@@ -4,6 +4,7 @@ function fn() {
 
   let config = {
     reqresUrl: "https://reqres.in",
+    mockserverUrl: "http://localhost:1080",
     userName: "eve.holt@reqres.in",
     userPassword: "cityslicka",
     env: "dev"
@@ -12,6 +13,7 @@ function fn() {
   if (env === "qa") {
     //Here the config attribute values can be overwritten according to the test environment
     config.env = "qa"
+    config.mockserverUrl ="http://mockserver:1080"
   }
 
   let result = {

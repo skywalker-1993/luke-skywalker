@@ -1,0 +1,10 @@
+[
+  {
+    "httpRequest": {
+      "path": "/someEndpoint"
+    },
+    "httpResponse": {
+      "body": "{\"someAttribute\": 99}"
+    }
+  }
+]
